@@ -16,26 +16,28 @@ if (!navBackdrop) {
 }
 
 // Navigation toggle with responsive detection
-navToggle.addEventListener('click', () => {
-    const isDesktop = window.innerWidth >= 1025;
+if (navToggle) {
+    navToggle.addEventListener('click', () => {
+        const isDesktop = window.innerWidth >= 1025;
 
-    if (isDesktop) {
-        // Desktop: toggle expanded class
-        navbar.classList.toggle('expanded');
-        navToggle.classList.toggle('active');
-    } else {
-        // Mobile/Tablet: toggle drawer
-        navMenu.classList.toggle('open');
-        navToggle.classList.toggle('active');
-        navBackdrop.classList.toggle('active');
-        document.body.style.overflow = navMenu.classList.contains('open') ? 'hidden' : '';
-    }
-});
+        if (isDesktop) {
+            // Desktop: toggle expanded class
+            navbar.classList.toggle('expanded');
+            navToggle.classList.toggle('active');
+        } else {
+            // Mobile/Tablet: toggle drawer
+            navMenu.classList.toggle('open');
+            navToggle.classList.toggle('active');
+            navBackdrop.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('open') ? 'hidden' : '';
+        }
+    });
+}
 
 // Close mobile menu when clicking on backdrop
 navBackdrop.addEventListener('click', () => {
     navMenu.classList.remove('open');
-    navToggle.classList.remove('active');
+    if (navToggle) navToggle.classList.remove('active');
     navBackdrop.classList.remove('active');
     document.body.style.overflow = '';
 });
@@ -47,10 +49,10 @@ navLinks.forEach(link => {
 
         if (isDesktop) {
             navbar.classList.remove('expanded');
-            navToggle.classList.remove('active');
+            if (navToggle) navToggle.classList.remove('active');
         } else {
             navMenu.classList.remove('open');
-            navToggle.classList.remove('active');
+            if (navToggle) navToggle.classList.remove('active');
             navBackdrop.classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -75,7 +77,7 @@ window.addEventListener('resize', () => {
         }
 
         // Reset toggle button
-        navToggle.classList.remove('active');
+        if (navToggle) navToggle.classList.remove('active');
     }, 250);
 });
 

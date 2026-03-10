@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Command Dashboard | Beyond the Classroom</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../assets/icon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/command.css">
+</head>
+<body class="loaded command-body">
+    <!-- Auth Loading Overlay -->
+    <div id="authLoadingOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 9999;">
+        <div style="text-align: center; color: white;">
+            <i class="fas fa-spinner fa-spin" style="font-size: 3rem; margin-bottom: 1rem; color: #D4AF37;"></i>
+            <p style="font-size: 1.2rem; font-weight: 500;">Verifying authentication...</p>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="command-header" style="display: none;" id="dashboardHeader">
+        <div class="header-content">
+            <div class="header-left">
+                <h1><i class="fas fa-graduation-cap"></i> Beyond the Classroom</h1>
+                <p>Manage your extracurricular activities</p>
+            </div>
+            <div class="header-right">
+                <a href="../index.html" class="btn-header" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> View Site
+                </a>
+                <button id="logoutButton" class="btn-header btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="command-container" style="display: none;" id="dashboardContent">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Total Activities</p>
+                    <p class="stat-value" id="totalCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #10b981, #34d399);">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Published</p>
+                    <p class="stat-value" id="publishedCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+                    <i class="fas fa-eye-slash"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Unpublished</p>
+                    <p class="stat-value" id="unpublishedCount">0</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #8b5cf6, #a78bfa);">
+                    <i class="fas fa-images"></i>
+                </div>
+                <div class="stat-info">
+                    <p class="stat-label">Total Photos</p>
+                    <p class="stat-value" id="photoCount">0</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section">
+            <div class="section-header">
+                <h2><i class="fas fa-plus-circle"></i> Add New Activity</h2>
+                <button id="toggleFormBtn" class="btn-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+
+            <form id="uploadForm" class="upload-form" style="display: none;">
+                <!-- Feedback Messages -->
+                <div id="uploadSuccess" class="message message-success" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="uploadSuccessText"></span>
+                </div>
+                <div id="uploadError" class="message message-error" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="uploadErrorText"></span>
+                </div>
+
+                <!-- Title -->
+                <div class="form-group">
+                    <label for="activityTitle">Activity Title *</label>
+                    <input
+                        type="text"
+                        id="activityTitle"
+                        placeholder="e.g., Organized Engineering Innovation Summit 2024"
+                        required
+                        maxlength="150"
+                    >
+                    <span class="char-count"><span id="titleCount">0</span>/150</span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="activityDescription">Description *</label>
+                    <textarea
+                        id="activityDescription"
+                        placeholder="Describe your role, what you learned, and the impact..."
+                        required
+                        rows="5"
+                        maxlength="800"
+                    ></textarea>
+                    <span class="char-count"><span id="descCount">0</span>/800</span>
+                </div>
+
+                <!-- Photo Upload -->
+                <div class="form-group">
+                    <label>Photos * (Multiple allowed)</label>
+                    <div class="photo-upload-area" id="photoUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Click to upload photos or drag & drop</p>
+                        <span class="upload-hint">Recommended: JPG, PNG (max 5MB each)</span>
+                        <input
+                            type="file"
+                            id="photoInput"
+                            accept="image/jpeg,image/jpg,image/png,image/webp"
+                            multiple
+                            style="display: none;"
+                        >
+                    </div>
+
+                    <!-- Photo Previews -->
+                    <div id="photoPreviewContainer" class="photo-preview-container"></div>
+
+                    <!-- Upload Progress -->
+                    <div id="uploadProgress" class="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                        <p class="progress-text">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            Uploading: <span id="progressText">0%</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        <i class="fas fa-save"></i> Save Activity
+                    </button>
+                    <button type="button" class="btn-secondary" id="resetFormBtn">
+                        <i class="fas fa-redo"></i> Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Activities List -->
+        <div class="activities-section">
+            <div class="section-header">
+                <h2><i class="fas fa-tasks"></i> Manage Activities</h2>
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-filter="all">All</button>
+                    <button class="filter-tab" data-filter="published">Published</button>
+                    <button class="filter-tab" data-filter="unpublished">Unpublished</button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loadingState" class="loading-state">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading activities...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-folder-open"></i>
+                <h3>No activities yet</h3>
+                <p>Start by adding your first extracurricular activity above!</p>
+            </div>
+
+            <!-- Activities Grid -->
+            <div id="activitiesGrid" class="activities-grid" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Activity</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editActivityId">
+
+                <div class="form-group">
+                    <label for="editTitle">Title</label>
+                    <input type="text" id="editTitle" required maxlength="150">
+                </div>
+
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" required rows="5" maxlength="800"></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-primary">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                    <button type="button" class="btn-secondary" id="cancelEdit">
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="../js/firebase-config.js"></script>
+
+    <!-- Dashboard Logic -->
+    <script src="../js/command-dashboard.js"></script>
+</body>
+</html>

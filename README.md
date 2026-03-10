@@ -4,9 +4,32 @@ Professional portfolio website for Electrical & Electronics Engineering student 
 
 ---
 
+## Quick Start
+
+### Running Locally
+
+```bash
+cd /media/sf_Shared/portfolio
+python3 -m http.server 8080
+```
+
+**Access at:** http://localhost:8080
+
+**Pages:**
+- **Main Portfolio**: http://localhost:8080/index.html
+- **Beyond the Classroom**: http://localhost:8080/beyond-classroom.html
+- **Admin Dashboard**: http://localhost:8080/command/login.html (requires authentication)
+
+> **Note:** You must use an HTTP server (not file://) because Firebase Authentication requires a proper origin for security.
+
+---
+
 ## Overview
 
-A modern, responsive single-page portfolio website showcasing academic background, technical skills, projects, and professional experience. Designed specifically for industrial attachment applications with emphasis on power systems, control systems, and circuit design expertise.
+A modern, responsive portfolio website featuring:
+- **Main Portfolio** - Academic background, technical skills, projects, and professional experience
+- **Beyond the Classroom** - Public showcase of extracurricular activities and leadership roles
+- **Command Dashboard** - Secure admin panel for managing activities (Firebase authenticated)
 
 **Purpose:** Present qualifications and experience to potential employers for 3-month industrial attachment (July-September 2026)
 
@@ -14,24 +37,83 @@ A modern, responsive single-page portfolio website showcasing academic backgroun
 
 ## Technology Stack
 
-### Core Technologies
+### Frontend
 - **HTML5** - Semantic markup and structure
 - **CSS3** - Modern styling with custom properties, flexbox, grid
 - **JavaScript (ES6+)** - Interactive features and animations
 
-### Libraries & Frameworks
+### Backend Services
+- **Firebase Authentication** - Secure admin login
+- **Firebase Firestore** - Database for activities
+- **Cloudinary** - Image hosting and optimization (no Cloud Functions needed)
+
+### Libraries
 - **AOS (Animate On Scroll)** - Scroll-triggered animations
 - **Font Awesome 6.5.1** - Icon library
 - **Google Fonts (Inter)** - Typography
 
+---
+
+## Image Management Workflow
+
+### Upload Process
+1. **Client-Side Compression**
+   - Images compressed to max 1MB using JavaScript canvas API
+   - Maintains quality while reducing file size
+   - Automatic aspect ratio preservation
+
+2. **Cloudinary Upload**
+   - Direct browser upload to Cloudinary API
+   - No backend/Cloud Functions needed
+   - Organized in folder: `portfolio/beyond-classroom/`
+   - Returns secure HTTPS URLs
+
+3. **Firestore Storage**
+   - Only Cloudinary URLs stored in database
+   - Lightweight document structure
+   - Fast queries and real-time updates
+
+### Deletion Process
+**Manual deletion via Cloudinary console:**
+
+When you delete an activity from the dashboard:
+1. Activity removed from Firestore ✅
+2. Console logs Cloudinary photo URLs
+3. Follow printed instructions to delete from Cloudinary:
+   - Visit https://console.cloudinary.com/console
+   - Navigate to Media Library
+   - Search folder: `portfolio/beyond-classroom`
+   - Delete listed images manually
+
+**Why manual?** Keeps architecture simple on Spark (free) plan - no Cloud Functions or Blaze plan upgrade needed.
+
+---
+
+## Cloudinary Configuration
+
+### Current Setup
+```javascript
+// In js/firebase-config.js
+CLOUDINARY_CLOUD_NAME: 'dnmp1jys0'
+CLOUDINARY_UPLOAD_PRESET: 'portfolio-uploads'
+CLOUDINARY_FOLDER: 'portfolio/beyond-classroom'
+```
+
 ### Features
-- Fully responsive design (mobile-first approach)
-- Dark theme with black & gold color scheme
-- Smooth scroll navigation
-- Animated hamburger menu with drawer (mobile) and expandable nav (desktop)
-- Animated golden border light effect
-- Scroll progress indicator
-- Lazy loading optimization
+- ✅ **Free Tier:** 25GB storage + 25GB bandwidth/month
+- ✅ **Direct Upload:** Browser → Cloudinary (no backend)
+- ✅ **Automatic CDN:** Fast global image delivery
+- ✅ **Secure URLs:** HTTPS by default
+
+### Access
+- **Dashboard:** https://console.cloudinary.com/console
+- **Media Library:** View/manage all uploaded images
+- **Usage Stats:** Monitor storage and bandwidth
+
+### Maintenance
+- Review uploaded images monthly
+- Delete unused/test images to stay within free tier
+- Console logs provide direct URLs for easy identification
 
 ---
 
@@ -39,20 +121,61 @@ A modern, responsive single-page portfolio website showcasing academic backgroun
 
 ```
 portfolio/
-├── home.html                 # Main HTML file (entry point)
+├── index.html                      # Main portfolio page
+├── beyond-classroom.html           # Public activities showcase
+├── command/
+│   ├── login.html                  # Admin login page
+│   └── dashboard.html              # Admin dashboard
 ├── assets/
-│   ├── icon.ico             # Website favicon
+│   ├── icon.ico                    # Website favicon
 │   ├── isaac-githinji-resume.pdf
 │   ├── industrial-attachment-letter.pdf
-│   └── images/              # Image assets folder
-│       ├── profile.jpg      # (To be added) Professional photo
-│       └── projects/        # (To be added) Project screenshots
+│   └── images/
+│       ├── profile-photo.jpg
+│       └── projects/               # Project screenshots
 ├── css/
-│   └── style.css            # Main stylesheet (1500+ lines)
+│   ├── style.css                   # Main portfolio styles
+│   └── command.css                 # Admin dashboard styles
 ├── js/
-│   └── main.js              # Main JavaScript file (460+ lines)
-└── README.md                # This file
+│   ├── main.js                     # Main portfolio logic
+│   ├── firebase-config.js          # Firebase & Cloudinary config
+│   ├── command-auth.js             # Admin login logic
+│   ├── command-dashboard.js        # Dashboard logic
+│   └── beyond-classroom.js         # Public activities page logic
+├── firebase.json                   # Firebase hosting config
+├── .firebaserc                     # Firebase project config
+├── firestore.rules                 # Database security rules
+├── firestore.indexes.json          # Database indexes
+└── README.md                       # This file
 ```
+
+---
+
+## Features
+
+### Main Portfolio
+- ✅ Fully responsive design (mobile-first approach)
+- ✅ Dark theme with black & gold color scheme
+- ✅ Smooth scroll navigation
+- ✅ Animated sections with AOS
+- ✅ Scroll progress indicator
+- ✅ Professional resume and documents download
+
+### Beyond the Classroom
+- ✅ Public showcase of extracurricular activities
+- ✅ Photo slideshow with auto-advance
+- ✅ Responsive card layout
+- ✅ Only displays published activities
+
+### Command Dashboard
+- ✅ Secure Firebase authentication
+- ✅ Upload activities with multiple photos
+- ✅ Image compression and Cloudinary hosting
+- ✅ Publish/unpublish activities
+- ✅ Edit and delete functionality (Firestore)
+- ✅ Manual photo deletion via Cloudinary console (console logs provide URLs)
+- ✅ Real-time statistics
+- ✅ Upload progress indicator
 
 ---
 
@@ -85,209 +208,93 @@ portfolio/
 - **Font Weights:** 300, 400, 500, 600, 700, 800
 - **Base Size:** 16px (1rem)
 
-### Spacing Scale
-```css
---spacing-xs: 0.25rem   /* 4px */
---spacing-sm: 0.5rem    /* 8px */
---spacing-md: 1rem      /* 16px */
---spacing-lg: 1.5rem    /* 24px */
---spacing-xl: 2rem      /* 32px */
---spacing-2xl: 3rem     /* 48px */
---spacing-3xl: 4rem     /* 64px */
-```
-
 ---
 
-## Image Asset Guidelines
+## Development
 
-### Naming Conventions
+### Local Development
 
-**Use kebab-case (lowercase-with-hyphens)** for all file names:
+1. **Start the server:**
+   ```bash
+   python3 -m http.server 8080
+   ```
 
-✅ **Good:**
-- `profile-photo.jpg`
-- `solar-project-thumbnail.png`
-- `power-supply-circuit.jpg`
+2. **Open in browser:**
+   - Main portfolio: http://localhost:8080/index.html
+   - Activities: http://localhost:8080/beyond-classroom.html
 
-❌ **Bad:**
-- `Profile Photo.jpg` (spaces)
-- `SolarProjectThumbnail.png` (PascalCase)
-- `power_supply_circuit.jpg` (snake_case)
+3. **Admin access:**
+   - Login: http://localhost:8080/command/login.html
+   - Use credentials from Firebase Authentication
 
-### Directory Structure
+### Testing Authentication
 
-```
-assets/images/
-├── profile.jpg                          # Professional headshot (500×500px)
-├── profile-placeholder.svg              # Temporary placeholder
-├── projects/
-│   ├── solar-energy-analysis.jpg        # Solar PV project
-│   ├── power-supply-circuit.jpg         # Dual-output power supply
-│   ├── noise-detection-system.jpg       # Smart noise monitoring
-│   ├── residential-wiring.jpg           # Electrical installation
-│   ├── led-matrix-display.jpg           # 8×8 LED matrix
-│   └── calculator-cpp.jpg               # C++ calculator
-└── icons/
-    └── skills/                          # Custom skill icons (optional)
-```
-
-### Image Specifications
-
-#### Profile Photo
-- **Dimensions:** Any square ratio (1:1 recommended)
-- **Format:** JPG or PNG
-- **Size:** < 200KB (optimized recommended)
-- **Content:** Clear, well-lit photo
-- **Note:** Currently using profile-photo.jpg in assets/images/
-
-#### Project Images
-- **Dimensions:** 1200×675px (16:9 ratio)
-- **Format:** JPG or PNG
-- **Size:** < 200KB each
-- **Content:** Clear, well-lit photos of projects
-- **Quality:** High resolution, sharp focus
-
-#### Icons
-- **Format:** SVG (vector) preferred, PNG fallback
-- **Size:** 48×48px or 64×64px
-- **Style:** Consistent with gold theme
-
-### Optimization Tips
-1. **Compress images** before uploading (use TinyPNG, ImageOptim)
-2. **Use WebP format** for modern browsers (with JPG fallback)
-3. **Lazy load** images below the fold
-4. **Provide alt text** for accessibility
-
----
-
-## Navigation System
-
-### Desktop (≥1025px)
-- **Collapsed:** 80px wide navbar with centered hamburger icon
-- **Expanded:** Full-width navbar with horizontal menu
-- **Animation:** 3-second theatrical expansion with 3D flip (405° rotation)
-- **Logo:** Hidden when collapsed, appears on expansion
-
-### Mobile/Tablet (≤1024px)
-- **Type:** Left-sliding drawer menu
-- **Width:** 280px (max 75vw)
-- **Animation:** 0.8s smooth slide-in
-- **Backdrop:** Solid dark overlay (70% opacity, no blur)
-- **Menu Items:** Sequential fade-in with 0.2s increments
-
-### Toggle Button
-- **Desktop:** 30×30px, moves with navbar expansion
-- **Mobile:** 40×40px (larger for touch), gold glow when active
-- **Animation:** 405° rotation (desktop), 45° rotation (mobile)
-
----
-
-## Sections
-
-1. **Hero** - Name, title, quick links, stats
-2. **About** - Professional summary, key expertise areas
-3. **Education** - Academic timeline
-4. **Skills** - Technical expertise (4 categories)
-5. **Projects** - Academic projects organized by year
-6. **Certifications** - IEEE membership, certificates
-7. **Contact** - Email, phone, GitHub, portfolio link
-8. **Referees** - Professional references
-
----
-
-## Key Features
-
-### Animations
-- **Scroll Reveal:** AOS library for fade-in effects
-- **Hover Effects:** Scale, glow, color transitions
-- **Golden Border Light:** Clockwise-traveling light animation
-- **Scroll Progress:** Top progress bar indicator
-- **Skill Tags:** Staggered fade-in animation
-
-### Interactions
-- **Smooth Scrolling:** To section anchors
-- **Active Link Highlighting:** Based on scroll position
-- **Mobile Menu:** Backdrop closes drawer on click
-- **Scroll to Top Button:** Appears after 300px scroll
-
-### Performance
-- **Lazy Loading:** Images load on scroll into viewport
-- **Debounced Scroll:** Optimized event handlers
-- **CSS Transitions:** Hardware-accelerated transforms
-- **Minimal Dependencies:** Only essential libraries
-
----
-
-## Browser Compatibility
-
-✅ **Fully Supported:**
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari 12.1+ (conic-gradient support)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-⚠️ **Partial Support:**
-- Internet Explorer 11 (no CSS custom properties)
+1. Make sure you're accessing via HTTP (not file://)
+2. Navigate to `/command/login.html`
+3. Enter your Firebase admin credentials
+4. You'll be redirected to the dashboard
+5. Auth state persists across page refreshes
 
 ---
 
 ## Deployment
 
-### Local Development
-1. Open `home.html` directly in browser
-2. No build process required
-3. All dependencies loaded via CDN
+### Firebase Hosting (Production)
 
-### GitHub Pages
+The site is deployed on Firebase Hosting:
+
+**Live URL:** https://portfolio-44e4b.web.app
+
+**Deploy updates:**
+```bash
+firebase deploy
+```
+
+**Deploy only hosting:**
+```bash
+firebase deploy --only hosting
+```
+
+### GitHub Pages (Alternative)
+
 1. Push to GitHub repository
 2. Go to Settings → Pages
 3. Source: Deploy from branch (main)
 4. Folder: / (root)
 5. Save and wait for deployment
 
-### Custom Domain (Optional)
-1. Add `CNAME` file with domain name
-2. Configure DNS records:
-   - A records: `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - Or CNAME: `<username>.github.io`
-
 ---
 
-## Adding Content
+## Firebase Configuration
 
-### Adding a Project
-Edit `home.html` around line 265-365:
+### Configuration Files in Root Directory
 
-```html
-<div class="project-card" data-aos="fade-up">
-    <div class="project-image-placeholder">
-        <i class="fas fa-icon-name"></i>
-    </div>
-    <div class="project-content">
-        <h4>Project Title</h4>
-        <p>Project description...</p>
-        <div class="project-tags">
-            <span class="tag">Tag 1</span>
-            <span class="tag">Tag 2</span>
-        </div>
-    </div>
-</div>
-```
+The following files are required for Firebase deployment and **must remain in the project root**:
 
-### Adding a Skill
-Edit `home.html` around line 193-249:
+- **firebase.json** (20 lines) - Firebase hosting configuration and Firestore references
+- **.firebaserc** (5 lines) - Firebase project ID for CLI commands
+- **firestore.rules** (26 lines) - **CRITICAL** Database security rules
+- **firestore.indexes.json** (4 lines) - Firestore database indexes (required by Firebase CLI)
+- **js/firebase-config.js** (59 lines) - Frontend Firebase initialization code
 
-```html
-<div class="skill-category" data-aos="fade-up">
-    <div class="category-header">
-        <i class="fas fa-icon-name"></i>
-        <h3>Category Name</h3>
-    </div>
-    <div class="skill-items">
-        <span class="skill-tag">Skill Name</span>
-    </div>
-</div>
-```
+> ⚠️ **Important:** Do not move or delete these files. They enable `firebase deploy` and protect your database security.
+
+### Services Configured
+- **Authentication:** Email/Password enabled
+- **Firestore Database:** `beyondClassroom` collection
+- **Hosting:** Deployed at portfolio-44e4b.web.app
+
+### Security Rules (firestore.rules)
+The `firestore.rules` file contains critical security configurations:
+- ✅ Public users can read **only published** activities
+- ✅ Authenticated admins can read **all** activities
+- ✅ Only authenticated admins can create, update, or delete activities
+- ✅ All other collections are denied by default
+
+**Never delete firestore.rules** - it protects your database from unauthorized access.
+
+### Admin Access
+Create admin users in [Firebase Console](https://console.firebase.google.com/project/portfolio-44e4b/authentication/users)
 
 ---
 
@@ -313,24 +320,26 @@ This portfolio is for personal use and industrial attachment applications.
 
 ---
 
-## Maintenance Notes
+## Browser Compatibility
 
-### Regular Updates
-- [ ] Update year in footer (auto-generated via JavaScript)
-- [x] Profile photo added at `assets/images/profile-photo.jpg`
-- [ ] Add project screenshots to `assets/images/projects/`
-- [ ] Update resume PDF as needed
-- [ ] Add new projects/certifications as earned
-
-### Future Enhancements
-- [ ] Add project detail modal overlays
-- [ ] Implement contact form with backend
-- [ ] Add testimonials section
-- [ ] Create project case studies
-- [ ] Add blog/articles section (optional)
+✅ **Fully Supported:**
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari 12.1+
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
 ---
 
-**Last Updated:** February 23, 2026
-**Version:** 1.0.0
-**Status:** Ready for deployment
+## Maintenance
+
+### Regular Updates
+- [x] Update year in footer (auto-generated via JavaScript)
+- [x] Profile photo added
+- [x] Firebase backend configured
+- [ ] Update resume PDF as needed
+- [ ] Add new projects/certifications as earned
+- [ ] Add new activities via command dashboard
+
+---
+
+**Happy coding!** 🎉

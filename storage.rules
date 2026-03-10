@@ -1,0 +1,23 @@
+// Firebase Storage Security Rules for Portfolio Website
+// These rules should be deployed to your Firebase project
+// Deploy using: firebase deploy --only storage
+
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Beyond the Classroom images
+    match /beyond-classroom/{imageId} {
+      // Allow authenticated users to upload and delete
+      allow write: if request.auth != null;
+
+      // Allow anyone to read (images are public on website)
+      allow read: if true;
+    }
+
+    // Deny access to all other paths by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

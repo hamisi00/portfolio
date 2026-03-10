@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Githinji Isaac Hamisi - Extracurricular activities and personal achievements beyond the classroom">
+    <meta name="keywords" content="Student Leadership, Engineering Events, Community Service, Extracurricular Activities">
+    <meta name="author" content="Githinji Isaac Hamisi">
+    <title>Beyond the Classroom | Githinji Isaac Hamisi</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html" class="logo-link">
+                    <img src="assets/icon.ico" alt="Portfolio" class="logo-icon">
+                    <span class="company-name">PORTFOLIO</span>
+                </a>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <!-- Navigation items hidden on this page - use logo to return to home -->
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero hero-secondary">
+        <div class="hero-background">
+            <div class="circuit-pattern"></div>
+        </div>
+        <div class="container hero-content">
+            <div class="hero-text" data-aos="fade-up">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Beyond the Classroom</span>
+                </h1>
+                <h2 class="hero-subtitle">Experiences That Shape Who I Am</h2>
+                <p class="hero-description">
+                    Leadership, community service, and personal growth through extracurricular involvement
+                </p>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Down</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Activities Section -->
+    <section id="activities" class="beyond-classroom-section">
+        <div class="container">
+            <!-- Loading State -->
+            <div id="loadingActivities" class="loading-container">
+                <div class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <p class="loading-text">Loading activities...</p>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyActivities" class="empty-container" style="display: none;">
+                <div class="empty-icon">
+                    <i class="fas fa-calendar-alt"></i>
+                </div>
+                <h3>No Activities Yet</h3>
+                <p>Check back soon to see my extracurricular journey!</p>
+            </div>
+
+            <!-- Activities Grid -->
+            <div id="activitiesContainer" class="activities-container" style="display: none;"></div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; <span id="currentYear"></span> Githinji Isaac Hamisi. All rights reserved.</p>
+                <p class="footer-tagline">Electrical & Electronics Engineering Student | University of Nairobi</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Configuration -->
+    <script src="js/firebase-config.js"></script>
+
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- Main JavaScript -->
+    <script src="js/main.js"></script>
+
+    <!-- Beyond the Classroom Logic -->
+    <script src="js/beyond-classroom.js"></script>
+</body>
+</html>
