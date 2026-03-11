@@ -503,3 +503,39 @@ if (scrollIndicator) {
     // Initial check
     updateScrollIndicator();
 }
+
+// ============================================
+// SMART ENVIRONMENT DETECTION
+// ============================================
+
+/**
+ * Detects deployment environment and updates Beyond Classroom links
+ * - On GitHub Pages: Links to Vercel (for Firebase Firestore support)
+ * - On Vercel: Uses relative paths (same domain)
+ * - On localhost: Uses relative paths (local development)
+ */
+function updateBeyondClassroomLinks() {
+    const hostname = window.location.hostname;
+    const isGitHubPages = hostname.includes('github.io');
+
+    // Select all Beyond Classroom links
+    const beyondClassroomLinks = document.querySelectorAll('a[href*="beyond-classroom"]');
+
+    beyondClassroomLinks.forEach(link => {
+        if (isGitHubPages) {
+            // On GitHub Pages → Point to Vercel for Firebase functionality
+            link.href = 'https://githinji-portfolio.vercel.app/beyond-classroom.html';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+        } else {
+            // On Vercel or localhost → Use relative path
+            link.href = 'beyond-classroom.html';
+            // Remove target and rel attributes if they exist
+            link.removeAttribute('target');
+            link.removeAttribute('rel');
+        }
+    });
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', updateBeyondClassroomLinks);

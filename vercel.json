@@ -1,15 +1,7 @@
 {
   "version": 2,
-  "routes": [
-    {
-      "src": "/command/(.*)",
-      "dest": "/command/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
+  "cleanUrls": true,
+  "trailingSlash": false,
   "headers": [
     {
       "source": "/(.*)",
