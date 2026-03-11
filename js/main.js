@@ -524,7 +524,7 @@ function updateBeyondClassroomLinks() {
     beyondClassroomLinks.forEach(link => {
         if (isGitHubPages) {
             // On GitHub Pages → Point to Vercel for Firebase functionality
-            link.href = 'https://githinji-portfolio.vercel.app/beyond-classroom.html';
+            link.href = 'https://portfolio-githinji.vercel.app/beyond-classroom';
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
         } else {
